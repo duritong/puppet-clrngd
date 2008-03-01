@@ -17,7 +17,7 @@ class clrngd {
 
     service{clrngd:
         ensure => running,
-        enabled => true,
+        enable => true,
     }    
 
     #no config file needed
