@@ -2,23 +2,27 @@
 # Copyright (C) 2007 admin@immerda.ch
 #
 
-# modules_dir { "clrngd": }
-
 class clrngd {
+    case $operatingsystem {
+        gentoo: { include clrngd::gentoo }
+        default: { include clrngd::base }
+    } 
+}
 
-    package{clrngd:
+class clrngd::base {
+    package{'clrngd':
         ensure => installed,
-        category => $operatingsystem ? {
-            gentoo => sys-apps,
-            default => ''
-        },
     }
-
-
     service{clrngd:
         ensure => running,
         enable => true,
-    }    
+        hasstatus => true,
+        require => Package['clrngd']
+    } 
+}
 
-    #no config file needed
+class clrngd::gentoo inherits clrngd::base {
+    Package['clrngd']{
+        category => 'sys-apps',
+    }
 }
